@@ -9,9 +9,9 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: IntentTimelineProvider {
-    
     public typealias Entry = SimpleEntry
     
+    // Gives configuration different character options
     func character(for configuration:
         CharacterSelectionIntent) -> CharacterDetail {
         switch configuration.hero {
@@ -30,13 +30,15 @@ struct Provider: IntentTimelineProvider {
         return SimpleEntry(date: Date(), character: .panda, relevance: nil) // added relevance, not in tutorial
     }
     
-    func getSnapshot(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
+    // What exactly does this do?
+    func getSnapshot(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let entry = SimpleEntry(date: Date(), character: .panda, relevance: nil)
         completion(entry)
     }
     
+    // What exactly does this do?
     // Changed this function to update at certain times
-    func getTimeline(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (Timeline<SimpleEntry>) ->()) {
+    func getTimeline(for configuration: CharacterSelectionIntent, in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         let selectedCharacter = character(for: configuration)
         let endDate = selectedCharacter.fullHealthDate
         let oneMinute: TimeInterval = 60
@@ -80,6 +82,7 @@ struct EmojiRangerWidgetEntryView: View {
                     .foregroundColor(.white)
             }
             .background(Color.gameBackground)
+            .widgetURL(entry.character.url)
         default:
             ZStack {
                 HStack(alignment: .top) {
@@ -93,6 +96,7 @@ struct EmojiRangerWidgetEntryView: View {
                 .widgetURL(entry.character.url)
             }
             .background(Color.gameBackground)
+            .widgetURL(entry.character.url)
         }
         
     }
@@ -103,6 +107,7 @@ struct EmojiRangerWidget: Widget {
     private let kind: String = "EmojiRangerWidget"
 
     public var body: some WidgetConfiguration {
+        // Instead of static configuration, allows for config options!
         IntentConfiguration(kind: kind, intent: CharacterSelectionIntent.self, provider: Provider()) { entry in
             EmojiRangerWidgetEntryView(entry: entry)
         }
@@ -119,7 +124,7 @@ struct Widget_Previews: PreviewProvider {
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
             
             PlaceholderView()
-                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
         }
     }
 }
