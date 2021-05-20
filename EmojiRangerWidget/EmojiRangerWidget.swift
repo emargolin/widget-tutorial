@@ -93,7 +93,7 @@ struct EmojiRangerWidgetEntryView: View {
                         .foregroundColor(.white)
                 }
                 .padding()
-                .widgetURL(entry.character.url)
+//                .widgetURL(entry.character.url) // why is this here twice?
             }
             .background(Color.gameBackground)
             .widgetURL(entry.character.url)
